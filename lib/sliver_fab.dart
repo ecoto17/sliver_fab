@@ -61,6 +61,7 @@ class SliverFabState extends State<SliverFab> {
   @override
   Widget build(BuildContext context) {
     return Stack(
+      fit: StackFit.expand,
       children: <Widget>[
         CustomScrollView(
           controller: scrollController,
@@ -79,32 +80,17 @@ class SliverFabState extends State<SliverFab> {
         (widget.floatingPosition.top ?? 0) -
         defaultFabSize / 2;
 
-    final double scale0edge = widget.expandedHeight - kToolbarHeight;
-    final double scale1edge = defaultTopMargin - widget.topScalingEdge;
-
     double top = defaultTopMargin;
-    double scale = 1.0;
     if (scrollController.hasClients) {
       double offset = scrollController.offset;
-      top -= offset > 0 ? offset : 0;
-      if (offset < scale1edge) {
-        scale = 1.0;
-      } else if (offset > scale0edge) {
-        scale = 0.0;
-      } else {
-        scale = (scale0edge - offset) / (scale0edge - scale1edge);
-      }
+      top -= offset > 0.0 ? offset : 0.0;
     }
 
     return Positioned(
-      top: top,
+      top: top <= 80.0 ? 80.0 : top,
       right: widget.floatingPosition.right,
       left: widget.floatingPosition.left,
-      child: new Transform(
-        transform: new Matrix4.identity()..scale(scale, scale),
-        alignment: Alignment.center,
-        child: widget.floatingWidget,
-      ),
+      child: widget.floatingWidget,
     );
   }
 }
